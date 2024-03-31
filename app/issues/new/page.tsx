@@ -1,7 +1,7 @@
 "use client";
 import SimpleMDE from "react-simplemde-editor";
 import "easymde/dist/easymde.min.css";
-import { Button, Callout, Text, TextArea, TextField } from "@radix-ui/themes";
+import { Button, Callout, Spinner, Text, TextArea, TextField } from "@radix-ui/themes";
 import { useForm, Controller, SubmitHandler } from "react-hook-form";
 import axios from "axios";
 import { useRouter } from "next/navigation";
@@ -28,17 +28,19 @@ const NewIssuePage = () => {
         resolver: zodResolver(createIssueSchema)
     });
     const [error, setError] = useState("");
+    const [isSubmitting, setIsSubmitting] = useState(false);
     const router = useRouter();
     const onSubmit: SubmitHandler<IssueForm> = async (data) => {
         try {
+            setIsSubmitting(true);
             await axios.post("/api/issues", data);
             router.push("/issues");
         } catch (error) {
             console.log(error);
             setError("unexpected error occurred")
         }
+        setIsSubmitting(false);
     };
-    console.log(error);
 
     return (
         <div className="space-y-3 max-w-xl">
@@ -58,7 +60,7 @@ const NewIssuePage = () => {
                     )}
                 />
                 <ErrorMessage>{errors.description?.message}</ErrorMessage>
-                <Button>Submit New Issue</Button>
+                <Button disabled={isSubmitting}>Submit New Issue {isSubmitting && <Spinner />}</Button>
             </form>
         </div>
     );
