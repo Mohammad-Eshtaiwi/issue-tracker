@@ -1,11 +1,7 @@
 import prisma from "@/prisma/client";
 import { NextResponse, type NextRequest } from "next/server";
-import { TypeOf, z } from "zod";
-const createIssueSchema = z.object({
-    title: z.string().min(1, "title is required").max(255),
-    description: z.string().min(1, "title is required"),
-});
-
+import { TypeOf } from "zod";
+import { createIssueSchema } from "../../validationSchemas";
 // Define a type using TypeOf to get the TypeScript type from Zod schema
 type CreateIssueRequestBody = TypeOf<typeof createIssueSchema>;
 
