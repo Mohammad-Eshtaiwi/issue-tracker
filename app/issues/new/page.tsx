@@ -9,6 +9,7 @@ import { useState } from "react";
 import { createIssueSchema } from "@/app/validationSchemas";
 import { TypeOf } from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
+import ErrorMessage from "@/app/components/ErrorMesage";
 
 
 // Define a type using TypeOf to get the TypeScript type from Zod schema
@@ -48,7 +49,7 @@ const NewIssuePage = () => {
             </Callout.Root>}
             <form className="space-y-3" onSubmit={handleSubmit(onSubmit)}>
                 <TextField.Root placeholder="Title" {...register("title")} />
-                {errors.title && <Text as="p" color="red">{errors.title.message}</Text>}
+                <ErrorMessage>{errors.title?.message}</ErrorMessage>
                 <Controller
                     control={control}
                     name="description"
@@ -56,7 +57,7 @@ const NewIssuePage = () => {
                         <SimpleMDE placeholder="description" {...field} />
                     )}
                 />
-                {errors.description && <Text as="p" color="red">{errors.description.message}</Text>}
+                <ErrorMessage>{errors.description?.message}</ErrorMessage>
                 <Button>Submit New Issue</Button>
             </form>
         </div>
