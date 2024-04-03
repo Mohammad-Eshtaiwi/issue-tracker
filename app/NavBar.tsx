@@ -25,8 +25,6 @@ classNames
 
 const Navbar = () => {
     const pathName = usePathname()
-    console.log(pathName);
-
     return (
         <nav className="flex gap-6 border-b mb-5 px-5 h-14 items-center">
             <Link href="/">
@@ -34,7 +32,6 @@ const Navbar = () => {
             </Link>
             <ul className="flex gap-6">
                 {links.map(link => <li key={link.label}>
-                    {/* <Link className={isActiveThenAddClass(link.href, pathName) + linkClass} href={link.href}>{link.label}</Link> */}
                     <Link className={classNames(linkClass, {
                         'text-zinc-900': link.href === pathName,
                         'text-zinc-500': link.href !== pathName,
