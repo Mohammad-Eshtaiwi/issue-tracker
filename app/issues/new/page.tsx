@@ -1,14 +1,6 @@
 "use client";
-import SimpleMDE from "react-simplemde-editor";
 import "easymde/dist/easymde.min.css";
-import {
-  Button,
-  Callout,
-  Spinner,
-  Text,
-  TextArea,
-  TextField,
-} from "@radix-ui/themes";
+import { Button, Callout, Spinner, TextField } from "@radix-ui/themes";
 import { useForm, Controller, SubmitHandler } from "react-hook-form";
 import axios from "axios";
 import { useRouter } from "next/navigation";
@@ -17,6 +9,11 @@ import { createIssueSchema } from "@/app/validationSchemas";
 import { TypeOf } from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
 import ErrorMessage from "@/app/components/ErrorMesage";
+import dynamic from "next/dynamic";
+// import SimpleMDE from "react-simplemde-editor";
+const SimpleMDE = dynamic(() => import("react-simplemde-editor"), {
+  ssr: false,
+});
 
 // Define a type using TypeOf to get the TypeScript type from Zod schema
 type IssueForm = TypeOf<typeof createIssueSchema>;
