@@ -1,13 +1,13 @@
 import prisma from "@/prisma/client";
 import { NextResponse, type NextRequest } from "next/server";
 import { TypeOf } from "zod";
-import { createIssueSchema } from "../../validationSchemas";
+import { issueSchema } from "../../validationSchemas";
 // Define a type using TypeOf to get the TypeScript type from Zod schema
-type CreateIssueRequestBody = TypeOf<typeof createIssueSchema>;
+type CreateIssueRequestBody = TypeOf<typeof issueSchema>;
 
 export async function POST(request: NextRequest) {
     const body = await request.json() as CreateIssueRequestBody;
-    const validation = createIssueSchema.safeParse(body);
+    const validation = issueSchema.safeParse(body);
     if (!validation.success) {
         return NextResponse.json(validation.error.format(), { status: 400 })
     }

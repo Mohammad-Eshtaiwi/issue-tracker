@@ -5,7 +5,7 @@ import { useForm, Controller, SubmitHandler } from "react-hook-form";
 import axios from "axios";
 import { useRouter } from "next/navigation";
 import { useState } from "react";
-import { createIssueSchema } from "@/app/validationSchemas";
+import { issueSchema } from "@/app/validationSchemas";
 import { TypeOf } from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
 import ErrorMessage from "@/app/components/ErrorMessage";
@@ -16,7 +16,7 @@ const SimpleMDE = dynamic(() => import("react-simplemde-editor"), {
 });
 
 // Define a type using TypeOf to get the TypeScript type from Zod schema
-type IssueFormData = TypeOf<typeof createIssueSchema>;
+type IssueFormData = TypeOf<typeof issueSchema>;
 
 interface Props {
   issue?: Issue;
@@ -30,7 +30,7 @@ const IssueForm = ({ issue }: Props) => {
     // watch,
     formState: { errors },
   } = useForm<IssueFormData>({
-    resolver: zodResolver(createIssueSchema),
+    resolver: zodResolver(issueSchema),
   });
   const [error, setError] = useState("");
   const [isSubmitting, setIsSubmitting] = useState(false);
