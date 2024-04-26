@@ -8,7 +8,7 @@ import { useState } from "react";
 import { createIssueSchema } from "@/app/validationSchemas";
 import { TypeOf } from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
-import ErrorMessage from "@/app/components/ErrorMesage";
+import ErrorMessage from "@/app/components/ErrorMessage";
 import dynamic from "next/dynamic";
 // import SimpleMDE from "react-simplemde-editor";
 const SimpleMDE = dynamic(() => import("react-simplemde-editor"), {
