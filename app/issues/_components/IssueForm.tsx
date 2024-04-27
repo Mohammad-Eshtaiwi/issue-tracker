@@ -1,19 +1,16 @@
 "use client";
-import "easymde/dist/easymde.min.css";
+import ErrorMessage from "@/app/components/ErrorMessage";
+import { issueSchema } from "@/app/validationSchemas";
+import { zodResolver } from "@hookform/resolvers/zod";
+import { Issue } from "@prisma/client";
 import { Button, Callout, Spinner, TextField } from "@radix-ui/themes";
-import { useForm, Controller, SubmitHandler } from "react-hook-form";
 import axios from "axios";
+import "easymde/dist/easymde.min.css";
 import { useRouter } from "next/navigation";
 import { useState } from "react";
-import { issueSchema } from "@/app/validationSchemas";
+import { Controller, SubmitHandler, useForm } from "react-hook-form";
+import SimpleMDE from "react-simplemde-editor";
 import { TypeOf } from "zod";
-import { zodResolver } from "@hookform/resolvers/zod";
-import ErrorMessage from "@/app/components/ErrorMessage";
-import dynamic from "next/dynamic";
-import { Issue } from "@prisma/client";
-const SimpleMDE = dynamic(() => import("react-simplemde-editor"), {
-  ssr: false,
-});
 
 // Define a type using TypeOf to get the TypeScript type from Zod schema
 type IssueFormData = TypeOf<typeof issueSchema>;
@@ -44,6 +41,7 @@ const IssueForm = ({ issue }: Props) => {
         await axios.post("/api/issues", data);
       }
       router.push("/issues");
+      router.refresh();
     } catch (error) {
       console.log(error);
       setError("unexpected error occurred");
