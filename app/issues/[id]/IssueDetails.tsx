@@ -11,8 +11,8 @@ export const IssueDetails = ({ issue }: { issue: Issue }) => {
         <IssueStatusBadge status={issue.status} />
         <Text>{issue.createdAt.toDateString()}</Text>
       </Flex>
-      <Card className="prose mt-3">
-        <Markdown>{issue.description}</Markdown>
+      <Card className="mt-3">
+        <Markdown className="prose">{issue.description}</Markdown>
       </Card>
     </>
   );
