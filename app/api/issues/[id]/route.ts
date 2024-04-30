@@ -1,3 +1,4 @@
+import protectRoute from "@/app/auth/protectRoute";
 import { issueSchema } from "@/app/validationSchemas";
 import prisma from "@/prisma/client";
 import { NextRequest, NextResponse } from "next/server";
@@ -7,6 +8,7 @@ export async function PATCH(
   { params }: { params: { id: string } }
 ) {
   try {
+    await protectRoute();
     const body = await req.json();
     const validation = issueSchema.safeParse(body);
 
@@ -34,19 +36,23 @@ export async function PATCH(
 
     return NextResponse.json(updatedIssue, { status: 201 });
   } catch (error) {
-    // Handle any unexpected errors
     console.error("An error occurred:", error);
+    if (error instanceof NextResponse) return error;
+
     return NextResponse.json(
       { error: "An unexpected error occurred" },
       { status: 500 }
     );
   }
 }
+
 export async function DELETE(
   req: NextRequest,
   { params }: { params: { id: string } }
 ) {
   try {
+    await protectRoute();
+
     const issue = await prisma.issue.findUnique({
       where: {
         id: parseInt(params.id),
@@ -56,6 +62,7 @@ export async function DELETE(
     if (!issue) {
       return NextResponse.json({ error: "Invalid Issue" }, { status: 404 });
     }
+
     await prisma.issue.delete({
       where: {
         id: parseInt(params.id),
@@ -65,6 +72,8 @@ export async function DELETE(
     return NextResponse.json({}, { status: 201 });
   } catch (error) {
     console.error("An error occurred:", error);
+    if (error instanceof NextResponse) return error;
+
     return NextResponse.json(
       { error: "An unexpected error occurred" },
       { status: 500 }
