@@ -1,21 +1,46 @@
 import prisma from "@/prisma/client";
-import { Table } from "@radix-ui/themes";
-import { IssueStatusBadge, Link } from "@/app/components";
+import { Flex, Table } from "@radix-ui/themes";
+import { IssueStatusBadge /* Link */ } from "@/app/components";
 import IssueActions from "../IssueActions";
-import { Status } from "@prisma/client";
+import { Issue, Status } from "@prisma/client";
+import Link from "next/link";
+import { ArrowUpIcon } from "@radix-ui/react-icons";
+
+const validStatuses = Object.keys(Status);
 
 const IssuesPage = async ({
   searchParams,
 }: {
-  searchParams: { status: Status };
+  searchParams: { status: Status; orderby: keyof Issue };
 }) => {
-  console.log(searchParams);
-  const { status } = searchParams;
+  const { status, orderby } = searchParams;
+
+  const columns: { label: string; value: keyof Issue; className?: string }[] = [
+    {
+      value: "title",
+      label: "Issue",
+    },
+    {
+      value: "status",
+      label: "Status",
+      className: "hidden md:table-cell",
+    },
+    {
+      value: "createdAt",
+      label: "Created",
+      className: "hidden md:table-cell",
+    },
+  ];
 
   const issues = await prisma.issue.findMany({
     where: {
-      status,
+      status: (() => (validStatuses.includes(status) ? status : undefined))(),
     },
+    orderBy: (() => {
+      const validKeys = columns.map((col) => col.value);
+      if (!orderby && !validKeys.includes(orderby)) return undefined;
+      return { [orderby]: "asc" };
+    })(),
   });
 
   return (
@@ -24,13 +49,23 @@ const IssuesPage = async ({
       <Table.Root variant="surface">
         <Table.Header>
           <Table.Row>
-            <Table.ColumnHeaderCell>Issue</Table.ColumnHeaderCell>
-            <Table.ColumnHeaderCell className="hidden md:table-cell">
-              Status
-            </Table.ColumnHeaderCell>
-            <Table.ColumnHeaderCell className="hidden md:table-cell">
-              Created
-            </Table.ColumnHeaderCell>
+            {columns.map((column) => (
+              <Table.ColumnHeaderCell
+                key={column.value}
+                className={column.className}
+              >
+                <Flex gap="1" align="center">
+                  <Link
+                    href={{ query: { ...searchParams, orderby: column.value } }}
+                  >
+                    {column.label}
+                  </Link>
+                  {column.value === orderby && (
+                    <ArrowUpIcon className="inline " />
+                  )}
+                </Flex>
+              </Table.ColumnHeaderCell>
+            ))}
           </Table.Row>
         </Table.Header>
         <Table.Body>
