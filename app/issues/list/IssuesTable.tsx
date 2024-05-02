@@ -1,10 +1,8 @@
-import prisma from "@/prisma/client";
 import { Flex, Table } from "@radix-ui/themes";
-import { IssueStatusBadge /* Link */ } from "@/app/components";
+import { IssueStatusBadge, Link } from "@/app/components";
 import { Issue, Status } from "@prisma/client";
-import Link from "next/link";
 import { ArrowUpIcon } from "@radix-ui/react-icons";
-import Pagination from "@/app/components/Pagination";
+import NextLink from "next/link";
 
 const IssuesTable = async ({ searchParams, issues, issueCount }: Props) => {
   const { orderby } = searchParams;
@@ -19,11 +17,11 @@ const IssuesTable = async ({ searchParams, issues, issueCount }: Props) => {
                 className={column.className}
               >
                 <Flex gap="1" align="center">
-                  <Link
+                  <NextLink
                     href={{ query: { ...searchParams, orderby: column.value } }}
                   >
                     {column.label}
-                  </Link>
+                  </NextLink>
                   {column.value === orderby && (
                     <ArrowUpIcon className="inline " />
                   )}
