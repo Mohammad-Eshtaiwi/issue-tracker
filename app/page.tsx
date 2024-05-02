@@ -3,6 +3,7 @@ import IssuesSummary from "./IssuesSummary";
 import LatestIssues from "./LatestIssues";
 import prisma from "@/prisma/client";
 import { Status } from "@prisma/client";
+import IssueChart from "./IssueChart";
 
 type IssueStatusStatistics = {
   [key in Status]: number;
@@ -29,6 +30,11 @@ export default async function Home() {
     <Flex direction={"column"} gap={"5"}>
       <LatestIssues />
       <IssuesSummary
+        open={issuesStatusStatistics.OPEN}
+        inProgress={issuesStatusStatistics.IN_PROGRESS}
+        closed={issuesStatusStatistics.CLOSED}
+      />
+      <IssueChart
         open={issuesStatusStatistics.OPEN}
         inProgress={issuesStatusStatistics.IN_PROGRESS}
         closed={issuesStatusStatistics.CLOSED}
