@@ -1,4 +1,4 @@
-import { Flex } from "@radix-ui/themes";
+import { Flex, Grid } from "@radix-ui/themes";
 import IssuesSummary from "./IssuesSummary";
 import LatestIssues from "./LatestIssues";
 import prisma from "@/prisma/client";
@@ -27,18 +27,26 @@ export default async function Home() {
     );
 
   return (
-    <Flex direction={"column"} gap={"5"}>
+    <Grid
+      columns={{
+        initial: "1",
+        md: "2",
+      }}
+      gap={"5"}
+    >
+      <Flex direction={"column"} gap={"5"}>
+        <IssuesSummary
+          open={issuesStatusStatistics.OPEN}
+          inProgress={issuesStatusStatistics.IN_PROGRESS}
+          closed={issuesStatusStatistics.CLOSED}
+        />
+        <IssueChart
+          open={issuesStatusStatistics.OPEN}
+          inProgress={issuesStatusStatistics.IN_PROGRESS}
+          closed={issuesStatusStatistics.CLOSED}
+        />
+      </Flex>
       <LatestIssues />
-      <IssuesSummary
-        open={issuesStatusStatistics.OPEN}
-        inProgress={issuesStatusStatistics.IN_PROGRESS}
-        closed={issuesStatusStatistics.CLOSED}
-      />
-      <IssueChart
-        open={issuesStatusStatistics.OPEN}
-        inProgress={issuesStatusStatistics.IN_PROGRESS}
-        closed={issuesStatusStatistics.CLOSED}
-      />
-    </Flex>
+    </Grid>
   );
 }

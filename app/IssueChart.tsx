@@ -18,8 +18,8 @@ const IssueChart = ({ closed, inProgress, open }: Props) => {
     { label: "In Progress", value: inProgress },
   ];
   return (
-    <Card>
-      <ResponsiveContainer width="100%" height={300}>
+    <Card style={{ flex: 1 }}>
+      <ResponsiveContainer width="100%">
         <BarChart data={data}>
           <XAxis dataKey={"label"} />
           <YAxis />
